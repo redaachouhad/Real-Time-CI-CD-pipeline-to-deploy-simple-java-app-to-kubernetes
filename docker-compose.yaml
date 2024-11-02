@@ -1,0 +1,20 @@
+services:
+
+  todo_list_app:
+    image: redachouhad665/todo-list-app:latest
+    container_name: todo_list_app_container
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
