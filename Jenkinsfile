@@ -8,11 +8,9 @@ pipeline {
         SCANNER_HOME = tool 'sonarqube-scanner'
         SONAR_PROJECT_KEY = 'TodoList-App-Reda-Achouhad'
         SONAR_PROJECT_NAME = 'TodoList-App-Reda-Achouhad'
-        DEPLOY_SERVER = '54.235.62.85'
-        DEPLOY_USER = 'ubuntu'
         APP_NAME = 'redachouhad665/todo-list-app'
-        EMAIL_FROM = 'ci.cd.pipeline.2024@gmail.com'
-        EMAIL_TO = 'luxaryreda@gmail.com'
+        EMAIL_FROM = 'EMAIL_FROM @gmail.com'
+        EMAIL_TO = 'EMAIL_TO @gmail.com'
     }
     stages {
 
@@ -31,14 +29,14 @@ pipeline {
         stage('Maven Compile') {
             steps {
                 sh "mvn clean compile"
-                echo "project compiled successfully"
+                echo "Project is compiled successfully"
             }
         }
 
         stage('Maven Test') {
             steps {
                 sh "mvn test"
-                echo "tests passed successfully"
+                echo "Junit Tests are passed successfully"
             }
         }
 
@@ -52,7 +50,7 @@ pipeline {
                                 -Dsonar.java.binaries=. \
                                 -Dsonar.projectKey=$SONAR_PROJECT_KEY
                         '''
-                        echo "sonarqube analysis finished successfully"
+                        echo "Sonarqube analysis is finished successfully"
                     }
                 }
             }
@@ -63,7 +61,7 @@ pipeline {
             steps {
                 dependencyCheck additionalArguments: '--scan target/', odcInstallation: 'owasp'
                 dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-                echo "owasp check finished successfully"
+                echo "Owasp check finished successfully"
             }
         }
 
@@ -71,7 +69,7 @@ pipeline {
         stage('Trivy Scan Source Code and Dependencies') {
             steps {
                  sh "trivy fs ."
-                 echo "Trivy Scan Source Code and Dependencies finished successfully"
+                 echo "Trivy Scan Source Code and Dependencies is finished successfully"
             }
         }
 
@@ -88,7 +86,7 @@ pipeline {
             steps{
                 sh "docker build -t todo-list-app -f Dockerfile ."
                 sh "docker tag todo-list-app $APP_NAME:latest"
-                echo "docker image buolt successfully"
+                echo "docker image built successfully"
             }
         }
 
@@ -118,7 +116,7 @@ pipeline {
                 script{
                     withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: 'kubernetes-admin@kubernetes', credentialsId: 'k8s-token', namespace: 'webapps', restrictKubeConfigAccess: false, serverUrl: 'https://54.175.210.197:6443') {
                        sh "kubectl apply -f k8s_ressources/"
-                       echo "application deployed successfully in kubernetes"
+                       echo "Application is deployed successfully in kubernetes"
                     }
                 }
             }
